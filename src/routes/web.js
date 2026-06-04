@@ -8,6 +8,8 @@ const initWebRoutes = (app) => {
 
   router.get("/user", homeController.handleUserPage);
 
+  router.post("/users/create-user", homeController.handleCreateNewuser);
+
   return app.use("/", router);
 };
 
