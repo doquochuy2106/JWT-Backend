@@ -1,11 +1,4 @@
-import mysql from "mysql2";
-
-//crete the connection to database
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  database: "jwt",
-});
+import userService from "../service/userService";
 
 const handleHellowWord = (req, res) => {
   const name = "Huy";
@@ -22,15 +15,12 @@ const handleCreateNewuser = (req, res) => {
   const password = req.body.password;
   const username = req.body.username;
 
-  connection.query(
-    "INSERT INTO users (email,password,username) VALUES (?, ?, ?)",
-    [email, password, username],
-    function (err, results, fields) {
-      if (err) {
-        console.log(err);
-      }
-    },
-  );
+  // const checkPassWord = bcrypt.compareSync(password, hashPassword); // true
+  // console.log(">>> Check compareSync: ", checkPassWord);
+
+  // userService.createNewUser(email, password, username);
+  userService.getListUser();
+
   return res.send("handleCreateNewuser");
 };
 
