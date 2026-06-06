@@ -6,8 +6,9 @@ const handleHellowWord = (req, res) => {
   return res.render("home.ejs", { name, age });
 };
 
-const handleUserPage = (req, res) => {
-  return res.render("user.ejs");
+const handleUserPage = async (req, res) => {
+  let userList = await userService.getListUser();
+  return res.render("user.ejs", { userList });
 };
 
 const handleCreateNewuser = (req, res) => {
@@ -18,8 +19,7 @@ const handleCreateNewuser = (req, res) => {
   // const checkPassWord = bcrypt.compareSync(password, hashPassword); // true
   // console.log(">>> Check compareSync: ", checkPassWord);
 
-  // userService.createNewUser(email, password, username);
-  userService.getListUser();
+  userService.createNewUser(email, password, username);
 
   return res.send("handleCreateNewuser");
 };

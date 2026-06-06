@@ -3,22 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <!-- Latest compiled and minified CSS -->
+    <title>Đỗ Quốc Huy</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-
-    <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   </head>
   <body>
-    <form method="POST" action="/users/create-user">
-      <div class="container">
-        <div class="row">
-          <div class="pt-3"><h3>Create A New User:</h3></div>
-          <div class="user-infor-container">
+    
+    <div class="container">
+      <div class="row">
+        <div class="user-infor-container">
+          <form method="POST" action="/users/create-user">
+            <div class="pt-3">
+              <h3>Create A New User:</h3>
+            </div>
+
             <div class="mb-3 col-6">
               <label for="email" class="form-label">Email address</label>
               <input
@@ -51,12 +52,40 @@
                 name="username"
               />
             </div>
+            <div class="col-6"></div>
             <div class="col-12">
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-          </div>
+          </form>
+        </div>
+
+        <div class="table-users mt-3">
+          <h3>Table User:</h3>
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Email</th>
+                <th scope="col">Username</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% userList.forEach(function(item,index){ %>
+       <tr>
+                <th scope="row"><%= index + 1 %></th>
+                <td><%= item.email %></td>
+                <td><%= item.username %></td>
+                <td>
+                  <button class="btn btn-warning">Edit</button>
+                  <button class="btn btn-danger">Delete</button>
+                </td>
+              </tr>
+        <% }) %>
+            </tbody>
+          </table>
         </div>
       </div>
-    </form>
+    </div>
   </body>
 </html>
