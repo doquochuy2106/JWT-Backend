@@ -11,17 +11,25 @@ const handleUserPage = async (req, res) => {
   return res.render("user.ejs", { userList });
 };
 
-const handleCreateNewuser = (req, res) => {
+const handleCreateNewuser = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const username = req.body.username;
 
-  // const checkPassWord = bcrypt.compareSync(password, hashPassword); // true
-  // console.log(">>> Check compareSync: ", checkPassWord);
+  await userService.createNewUser(email, password, username);
 
-  userService.createNewUser(email, password, username);
-
-  return res.send("handleCreateNewuser");
+  return res.redirect("/user");
 };
 
-module.exports = { handleHellowWord, handleUserPage, handleCreateNewuser };
+const handleDeleteUser = async (req, res) => {
+  let id = req.params.id;
+  await userService.handleDeleteUser(id);
+  return res.redirect("/user");
+};
+
+module.exports = {
+  handleHellowWord,
+  handleUserPage,
+  handleCreateNewuser,
+  handleDeleteUser,
+};
