@@ -22,7 +22,7 @@ const createNewUser = async (email, password, username) => {
 
   try {
     const [rows, fields] = await connection.execute(
-      "INSERT INTO users (email,password,username) VALUES (?, ?, ?)",
+      "INSERT INTO user (email,password,username) VALUES (?, ?, ?)",
       [email, hashUserPassword, username],
     );
   } catch (error) {
@@ -39,7 +39,7 @@ const getListUser = async () => {
   });
 
   try {
-    const [rows, fields] = await connection.execute("select * from users");
+    const [rows, fields] = await connection.execute("select * from user");
     return rows;
   } catch (error) {
     console.log(error);
@@ -56,7 +56,7 @@ const handleDeleteUser = async (id) => {
 
   try {
     const [rows, fields] = await connection.execute(
-      "DELETE FROM users WHERE id=?",
+      "DELETE FROM user WHERE id=?",
       [id],
     );
     return rows;
@@ -75,7 +75,7 @@ const getUSerByid = async (id) => {
 
   try {
     const [rows, fields] = await connection.execute(
-      "SELECT * FROM users WHERE id=?",
+      "SELECT * FROM user WHERE id=?",
       [id],
     );
     return rows;
@@ -94,7 +94,7 @@ const handleUpdateUser = async (id, email, username) => {
 
   try {
     const [rows, fields] = await connection.execute(
-      "UPDATE users SET email = ?, username = ? WHERE id = ?", // Đã xóa dấu phẩy dư thừa
+      "UPDATE user SET email = ?, username = ? WHERE id = ?", // Đã xóa dấu phẩy dư thừa
       [email, username, id],
     );
     return rows;
