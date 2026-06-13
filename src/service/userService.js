@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import mysql from "mysql2/promise";
 import bluebird from "bluebird";
 import db from "../../models";
+import { where } from "sequelize/lib/sequelize";
 
 //create the connection, specify bluebird as promise
 
@@ -27,73 +28,52 @@ const createNewUser = async (email, password, username) => {
 };
 
 const getListUser = async () => {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "jwt",
-    Promise: bluebird,
-  });
-
+  let user = [];
   try {
-    const [rows, fields] = await connection.execute("select * from user");
-    return rows;
+    user = await db.User.findAll();
+    return user;
   } catch (error) {
-    console.log(error);
+    console.log("check error: ", error);
   }
 };
 
 const handleDeleteUser = async (id) => {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "jwt",
-    Promise: bluebird,
-  });
-
   try {
-    const [rows, fields] = await connection.execute(
-      "DELETE FROM user WHERE id=?",
-      [id],
-    );
-    return rows;
+    await db.User.destroy({
+      where: { id: id },
+    });
   } catch (error) {
-    console.log(">> check error: ", error);
+    console.log("check error: ", error);
   }
 };
 
 const getUSerByid = async (id) => {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "jwt",
-    Promise: bluebird,
-  });
-
+  let user = {};
   try {
-    const [rows, fields] = await connection.execute(
-      "SELECT * FROM user WHERE id=?",
-      [id],
-    );
-    return rows;
+    user = await db.User.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return user;
   } catch (error) {
     console.log("check error: ", error);
   }
 };
 
 const handleUpdateUser = async (id, email, username) => {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "jwt",
-    Promise: bluebird,
-  });
-
   try {
-    const [rows, fields] = await connection.execute(
-      "UPDATE user SET email = ?, username = ? WHERE id = ?", // Đã xóa dấu phẩy dư thừa
-      [email, username, id],
+    await db.User.update(
+      {
+        email: email,
+        username: username,
+      },
+      {
+        where: {
+          id: id,
+        },
+      },
     );
-    return rows;
   } catch (error) {
     console.log("check error: ", error);
   }
