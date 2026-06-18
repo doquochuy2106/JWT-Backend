@@ -3,6 +3,7 @@ import mysql from "mysql2/promise";
 import bluebird from "bluebird";
 import db from "../../models";
 import { where } from "sequelize/lib/sequelize";
+import { raw } from "body-parser";
 
 //create the connection, specify bluebird as promise
 
@@ -28,6 +29,29 @@ const createNewUser = async (email, password, username) => {
 };
 
 const getListUser = async () => {
+  //test relationship
+  let newUser = await db.User.findOne({
+    where: { id: 1 },
+    attributes: ["id", "email", "username"],
+    include: { model: db.Group, attributes: ["id", "name", "description"] },
+    raw: true,
+    nest: true,
+  });
+  console.log(">>> check newUser: ", newUser);
+
+  let roles = await db.Role.findAll({
+    attributes: ["url", "description"],
+    include: {
+      model: db.Group,
+      where: { id: 1 },
+      attributes: ["id", "name", "description"],
+    },
+    raw: true,
+    nest: true,
+  });
+
+  console.log(">>> check roles: ", roles);
+
   let user = [];
   try {
     user = await db.User.findAll();
