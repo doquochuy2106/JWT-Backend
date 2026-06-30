@@ -1,9 +1,11 @@
 import express from "express";
 
 import initWebRoutes from "./routes/web";
+import initApiRoutes from "./routes/api";
 require("dotenv").config();
 import bodyParser from "body-parser";
 import configViewEngine from "../config/viewEngine";
+import configCors from "../config/cors";
 // import connection from "../config/connectDB";
 
 const app = express();
@@ -20,27 +22,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // connection();
 
 //config CORS
-app.use(function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", process.env.REACT_URL);
-
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH",
-    "DELETE",
-  );
-
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type",
-  );
-
-  res.setHeader("Access-Control-Allow-Credentials", true);
-
-  next();
-});
+configCors(app);
 
 //config Routes
 initWebRoutes(app);
+initApiRoutes(app);
 
 app.listen(PORT, () => {
   console.log(">>> JWT Backend is running on port = " + PORT);
