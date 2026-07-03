@@ -45,7 +45,26 @@ const handleRegister = async (req, res) => {
   }
 };
 
+const handleLogin = (req, res) => {
+  console.log("check userData: ", req.body);
+  try {
+    return res.status(200).json({
+      EM: "Call API OK!",
+      EC: 1,
+      DT: "",
+    });
+  } catch (error) {
+    console.log("check error: ", error);
+    return res.status(500).json({
+      EM: "Error from server!",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
+
 module.exports = {
   testApi,
   handleRegister,
+  handleLogin,
 };
