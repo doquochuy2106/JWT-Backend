@@ -45,13 +45,23 @@ const handleRegister = async (req, res) => {
   }
 };
 
-const handleLogin = (req, res) => {
+const handleLogin = async (req, res) => {
   console.log("check userData: ", req.body);
   try {
+    if (!req.body.valueLogin || !req.body.password) {
+      return res.status(200).json({
+        EM: "Missing rquired parameter!",
+        EC: 1,
+        DT: "",
+      });
+    }
+
+    let data = await LoginRegisterService.handleLogin(req.body);
+
     return res.status(200).json({
-      EM: "Call API OK!",
-      EC: 1,
-      DT: "",
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
     });
   } catch (error) {
     console.log("check error: ", error);

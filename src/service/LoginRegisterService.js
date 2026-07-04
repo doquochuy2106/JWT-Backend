@@ -1,6 +1,7 @@
 const { where } = require("sequelize/lib/sequelize");
 const db = require("../../models");
 import bcrypt from "bcryptjs";
+import { Op } from "sequelize";
 
 const checkEmail = async (email) => {
   let isEmail = await db.User.findOne({
@@ -33,6 +34,10 @@ const salt = bcrypt.genSaltSync(10);
 const hashPassword = (password) => {
   const hashPass = bcrypt.hashSync(password, salt);
   return hashPass;
+};
+
+const checkPassword = (inputPassword, hasPassword) => {
+  return bcrypt.compareSync(inputPassword, hasPassword);
 };
 
 const handleRegister = async (userData) => {
@@ -78,6 +83,49 @@ const handleRegister = async (userData) => {
   }
 };
 
+const handleLogin = async (userData) => {
+  try {
+    let user = await db.User.findOne({
+      where: {
+        [Op.or]: [
+          { email: userData.valueLogin },
+          { phone: userData.valueLogin },
+        ],
+      },
+    });
+
+    if (user) {
+      let checkPass = checkPassword(userData.password, user.password);
+      if (checkPass) {
+        return {
+          EM: "Loign Sucess!",
+          EC: 0,
+          DT: user,
+        };
+      } else {
+        return {
+          EM: "Password không chính xác",
+          EC: 1,
+          DT: "",
+        };
+      }
+    }
+    return {
+      EM: "Email/Phone không chính xác",
+      EC: 1,
+      DT: "",
+    };
+  } catch (error) {
+    console.log("check error: ", error);
+    return {
+      EM: "Something wrong server!",
+      EC: 2,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   handleRegister,
+  handleLogin,
 };
