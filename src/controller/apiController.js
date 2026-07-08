@@ -46,7 +46,6 @@ const handleRegister = async (req, res) => {
 };
 
 const handleLogin = async (req, res) => {
-  console.log("check userData: ", req.body);
   try {
     if (!req.body.valueLogin || !req.body.password) {
       return res.status(200).json({
