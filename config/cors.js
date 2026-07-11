@@ -15,6 +15,11 @@ const configCors = (app) => {
 
     res.setHeader("Access-Control-Allow-Credentials", true);
 
+    // CHÍNH XÁC LÀ Ở ĐÂY: Trả về kết quả ngay cho preflight request
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);
+    }
+
     next();
   });
 };

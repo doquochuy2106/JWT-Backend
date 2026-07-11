@@ -12,6 +12,7 @@ const initApiRoutes = (app) => {
 
   //Users
   router.get("/users/read", userController.readFunc);
+  router.delete("/users/delete", userController.deleteFunc);
 
   return app.use("/api/v1", router);
 };

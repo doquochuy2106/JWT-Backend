@@ -46,6 +46,16 @@ const getUsersWithPaginate = async (page, limit) => {
     const { count, rows } = await db.User.findAndCountAll({
       offset: offset,
       limit: limit,
+      attributes: [
+        "id",
+        "email",
+        "password",
+        "username",
+        "address",
+        "sex",
+        "phone",
+      ],
+      include: { model: db.Group, attributes: ["id", "name", "description"] },
     });
 
     let totalPage = Math.ceil(count / limit);
@@ -70,7 +80,37 @@ const getUsersWithPaginate = async (page, limit) => {
   }
 };
 
+const deleteUsers = async (id) => {
+  try {
+    let user = await db.User.findOne({
+      where: { id: id },
+    });
+    if (user) {
+      await user.destroy();
+      return {
+        EM: "Delete User Success !",
+        EC: 0,
+        DT: [],
+      };
+    } else {
+      return {
+        EM: "User Not Esixt!",
+        EC: 1,
+        DT: [],
+      };
+    }
+  } catch (error) {
+    console.log("check error: ", error);
+    return {
+      EM: "Something Wrong server",
+      EC: 1,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   readFunc,
   getUsersWithPaginate,
+  deleteUsers,
 };
