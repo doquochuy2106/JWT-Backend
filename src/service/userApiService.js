@@ -1,5 +1,6 @@
 const db = require("../../models");
-
+import mysql from "mysql2/promise";
+import bcrypt from "bcryptjs";
 const readFunc = async () => {
   try {
     let user = await db.User.findAll({
@@ -109,8 +110,83 @@ const deleteUsers = async (id) => {
   }
 };
 
+const checkEmail = async (email) => {
+  let emailUser = await db.User.findOne({
+    where: { email: email },
+  });
+  if (emailUser) {
+    return true;
+  }
+  return false;
+};
+
+const checkPhoneNumber = async (phoneNumber) => {
+  let phone = await db.User.findOne({
+    where: { phone: phoneNumber },
+  });
+  if (phone) {
+    return true;
+  }
+  return false;
+};
+
+const salt = bcrypt.genSaltSync(10);
+
+const hashPassword = (password) => {
+  let hassUserPassword = bcrypt.hashSync(password, salt);
+  return hassUserPassword;
+};
+
+const createUsers = async (userData) => {
+  try {
+    let checkUserEmail = await checkEmail(userData.email);
+    if (checkUserEmail) {
+      return {
+        EM: "Email is already Esixt",
+        EC: 1,
+        DT: "",
+      };
+    }
+
+    let checkUserPhone = await checkPhoneNumber(userData.phone);
+    if (checkUserPhone) {
+      return {
+        EM: "Phone is already Esixt",
+        EC: 1,
+        DT: "",
+      };
+    }
+
+    let hashPasswordUser = hashPassword(userData.password);
+
+    let user = await db.User.create({
+      email: userData.email,
+      password: hashPasswordUser,
+      phone: userData.phone,
+      username: userData.username,
+      address: userData.address,
+      sex: userData.sex,
+      groupId: userData.group,
+    });
+
+    return {
+      EM: "Create a new User success",
+      EC: 0,
+      DT: [],
+    };
+  } catch (error) {
+    console.log("chekc error: ", error);
+    return {
+      EM: "Somethign Wrong Server",
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   readFunc,
   getUsersWithPaginate,
   deleteUsers,
+  createUsers,
 };

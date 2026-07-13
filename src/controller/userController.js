@@ -49,7 +49,39 @@ const deleteFunc = async (req, res) => {
   }
 };
 
+const createFunc = async (req, res) => {
+  try {
+    if (
+      !req.body.email ||
+      !req.body.phone ||
+      !req.body.password ||
+      !req.body.group
+    ) {
+      return res.status(200).json({
+        EM: "Missing Require Parameter",
+        EC: 1,
+        DT: [],
+      });
+    }
+
+    let data = await userApiService.createUsers(req.body);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: [],
+    });
+  } catch (error) {
+    console.log("check error: ", error);
+    res.status(500).json({
+      EM: "Erorr from Server",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
+
 module.exports = {
   readFunc,
   deleteFunc,
+  createFunc,
 };
