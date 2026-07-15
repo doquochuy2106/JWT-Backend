@@ -80,8 +80,27 @@ const createFunc = async (req, res) => {
   }
 };
 
+const updateFunc = async (req, res) => {
+  try {
+    let data = await userApiService.updateUser(req.body);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: "",
+    });
+  } catch (error) {
+    console.log("check error: ", error);
+    return res.status(500).json({
+      EM: "Eror from Server",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
+
 module.exports = {
   readFunc,
   deleteFunc,
   createFunc,
+  updateFunc,
 };

@@ -57,6 +57,7 @@ const getUsersWithPaginate = async (page, limit) => {
         "phone",
       ],
       include: { model: db.Group, attributes: ["id", "name", "description"] },
+      order: [["id", "DESC"]],
     });
 
     let totalPage = Math.ceil(count / limit);
@@ -144,7 +145,7 @@ const createUsers = async (userData) => {
       return {
         EM: "Email is already Esixt",
         EC: 1,
-        DT: "",
+        DT: "email",
       };
     }
 
@@ -153,7 +154,7 @@ const createUsers = async (userData) => {
       return {
         EM: "Phone is already Esixt",
         EC: 1,
-        DT: "",
+        DT: "phone",
       };
     }
 
@@ -184,9 +185,51 @@ const createUsers = async (userData) => {
   }
 };
 
+const updateUser = async (userData) => {
+  try {
+    if (!userData.group) {
+      return {
+        EM: "Empty Group !",
+        EC: 1,
+        DT: "group",
+      };
+    }
+    let user = await db.User.findOne({
+      where: { id: userData.id },
+    });
+    if (user) {
+      await user.update({
+        username: userData.username,
+        address: userData.address,
+        sex: userData.sex,
+        groupId: userData.group,
+      });
+      return {
+        EM: "Update User Success!",
+        EC: 0,
+        DT: "",
+      };
+    } else {
+      return {
+        EM: "Not found User",
+        EC: 1,
+        DT: "",
+      };
+    }
+  } catch (error) {
+    console.log("check error: ", error);
+    return {
+      EM: "Somethign wrong server",
+      EC: 1,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   readFunc,
   getUsersWithPaginate,
   deleteUsers,
   createUsers,
+  updateUser,
 };
