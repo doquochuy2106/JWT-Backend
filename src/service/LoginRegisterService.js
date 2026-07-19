@@ -2,6 +2,10 @@ const { where } = require("sequelize/lib/sequelize");
 const db = require("../../models");
 import bcrypt from "bcryptjs";
 import { Op } from "sequelize";
+import { getGroupsWithRoles } from "./JWTService";
+
+import { createJWT } from "../middleware/JWTAction";
+require("dotenv").config();
 
 const checkEmail = async (email) => {
   let isEmail = await db.User.findOne({
@@ -67,6 +71,7 @@ const handleRegister = async (userData) => {
       password: hassUserPassword,
       phone: userData.phoneNumber,
       username: userData.username,
+      groupId: 3,
     });
 
     return {
@@ -97,10 +102,23 @@ const handleLogin = async (userData) => {
     if (user) {
       let checkPass = checkPassword(userData.password, user.password);
       if (checkPass) {
+        let roles = await getGroupsWithRoles(user);
+
+        let payload = {
+          email: user.email,
+          roles,
+          inpiresin: process.env.JWT_EXPIRES_IN,
+        };
+
+        let token = createJWT(payload);
+
         return {
           EM: "Loign Sucess!",
           EC: 0,
-          DT: user,
+          DT: {
+            access_token: token,
+            Group: roles,
+          },
         };
       } else {
         return {

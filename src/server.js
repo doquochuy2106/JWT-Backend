@@ -22,14 +22,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //connect DB
 // connection();
 
-//test JWT
-createJWT();
-let decoded = verifyToken(
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRG9RdW9jSHV5IiwiYWRkcmVzcyI6IkhvQ2hpTWluaCIsImlhdCI6MTc4NDM0NDk0NH0.NblmXWP-PE-T8WSzJhQV6KOEe48_aP19jYvDAXOuR1Q",
-);
-
-console.log("check verify: ", decoded);
-
 //config CORS
 configCors(app);
 
