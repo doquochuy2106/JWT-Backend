@@ -29,6 +29,10 @@ configCors(app);
 initWebRoutes(app);
 initApiRoutes(app);
 
+app.use((req, res) => {
+  return res.send("404 Not Found");
+});
+
 app.listen(PORT, () => {
   console.log(">>> JWT Backend is running on port = " + PORT);
 });
