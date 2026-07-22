@@ -57,6 +57,12 @@ const handleLogin = async (req, res) => {
 
     let data = await LoginRegisterService.handleLogin(req.body);
 
+    //set cookies
+    res.cookie("JWT", data.DT.access_token, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+    });
+
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,

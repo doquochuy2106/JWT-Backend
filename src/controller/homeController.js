@@ -7,6 +7,7 @@ const handleHellowWord = (req, res) => {
 };
 
 const handleUserPage = async (req, res) => {
+  console.log("check cookies: ", req.cookies);
   let userList = await userService.getListUser();
   return res.render("user.ejs", { userList });
 };

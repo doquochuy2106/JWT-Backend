@@ -8,6 +8,7 @@ import configViewEngine from "../config/viewEngine";
 import configCors from "../config/cors";
 // import connection from "../config/connectDB";
 import { createJWT, verifyToken } from "./middleware/JWTAction";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -18,6 +19,9 @@ configViewEngine(app);
 //config body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//config cookieParser
+app.use(cookieParser());
 
 //connect DB
 // connection();
