@@ -13,17 +13,13 @@ const testMiddleWare = (req, res, next) => {
 };
 
 const initApiRoutes = (app) => {
-  router.get("/test-api", apiController.testApi);
+  router.all("*", checkUserJWT, checkUserPermission);
+
   router.post("/register", apiController.handleRegister);
   router.post("/login", apiController.handleLogin);
 
   //Users
-  router.get(
-    "/users/read",
-    checkUserJWT,
-    checkUserPermission,
-    userController.readFunc,
-  );
+  router.get("/users/read", userController.readFunc);
   router.delete("/users/delete", userController.deleteFunc);
   router.post("/users/create", userController.createFunc);
   router.put("/users/update", userController.updateFunc);
