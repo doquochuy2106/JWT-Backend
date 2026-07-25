@@ -107,6 +107,7 @@ const handleLogin = async (userData) => {
         let payload = {
           email: user.email,
           roles,
+          username: user.username,
           inpiresin: process.env.JWT_EXPIRES_IN,
         };
 
