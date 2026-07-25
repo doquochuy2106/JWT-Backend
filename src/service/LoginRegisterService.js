@@ -118,6 +118,8 @@ const handleLogin = async (userData) => {
           DT: {
             access_token: token,
             Group: roles,
+            email: user.email,
+            username: user.username,
           },
         };
       } else {
