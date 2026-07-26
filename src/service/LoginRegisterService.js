@@ -108,7 +108,6 @@ const handleLogin = async (userData) => {
           email: user.email,
           roles,
           username: user.username,
-          inpiresin: process.env.JWT_EXPIRES_IN,
         };
 
         let token = createJWT(payload);
